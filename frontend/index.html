@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GroundTruth</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">GroundTruth</div>
+    <div class="navbar-links">
+      <button class="nav-btn active" data-page="home">Home</button>
+      <button class="nav-btn" data-page="satellite">Satellite</button>
+      <button class="nav-btn" data-page="photo">Photo</button>
+    </div>
+  </nav>
+
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Satellite Data</p>
+        <h1>Draw a field.<br />See its real health.</h1>
+        <p class="hero-body">
+          Outline any field on the map and GroundTruth pulls the latest
+          cloud-free satellite pass over that exact shape — turning raw
+          vegetation data into a clear, zone-by-zone health read in seconds.
+        </p>
+        <button class="cta-button" id="go-to-satellite">Try the Satellite Map →</button>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="ndvi-swatch-grid" id="hero-grid"></div>
+        <div class="hero-visual-caption">Live NDVI color scale — bare soil to dense canopy</div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <span class="flow-index">01</span>
+        <h3>Draw your field</h3>
+        <p>Outline any field directly on a satellite map — no GPS device needed.</p>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <span class="flow-index">02</span>
+        <h3>Pull real satellite data</h3>
+        <p>Live Sentinel-2 vegetation data (NDVI), fetched for the exact shape you drew.</p>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <span class="flow-index">03</span>
+        <h3>Get a health score</h3>
+        <p>A 0–100 score and plain-language read on your field's condition, in seconds.</p>
+      </div>
+    </div>
+
+    <div class="section-divider">
+      <span>Two separate tools</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-text">
+        <p class="hero-eyebrow">AI-powered photo scanning</p>
+        <h1>Snap a photo.<br />Catch the early signs.</h1>
+        <p class="hero-body">
+          Upload a close-up photo of a plant or leaf and GroundTruth scans
+          it with a vision AI model — flagging discoloration, wilting, or
+          pest damage and giving you a clear health score, independent of
+          the Satellite tool above.
+        </p>
+        <button class="cta-button" id="go-to-photo">Try the Photo Tool →</button>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="ground-photo-frame">
+          <img
+            class="ground-photo-img"
+            src="image.png"
+            alt=""
+          />
+          <div class="scan-line"></div>
+        </div>
+        <div class="hero-visual-caption">Live AI scan — discoloration, wilting, pest damage</div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <span class="flow-index">01</span>
+        <h3>Upload a photo</h3>
+        <p>Take a close-up shot of a plant or leaf and drop it in — no special equipment needed.</p>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <span class="flow-index">02</span>
+        <h3>AI scans for stress</h3>
+        <p>A vision model checks for discoloration, wilting, pest damage, and other visible issues.</p>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <span class="flow-index">03</span>
+        <h3>Get a health score</h3>
+        <p>A 0–100 score and plain-language read on what the photo shows, in seconds.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-satellite" class="page">
+    <div class="info-bar">
+      <div class="info-bar-text">
+        <strong>Draw your field boundary</strong>
+        <span>Search a location, then use the polygon tool to outline your field.</span>
+      </div>
+      <form id="search-form" class="search-form">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search a city or address..."
+          autocomplete="off"
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <div id="map">
+      <div class="draw-hint" id="draw-hint">
+        <span>← Click here to draw your field</span>
+      </div>
+    </div>
+
+    <div id="results-panel" class="results-panel hidden">
+      <div class="results-score">
+        <div class="score-circle" id="score-circle">--</div>
+        <div class="score-label">Health Score</div>
+      </div>
+      <div class="results-summary">
+        <p id="results-sentence">Draw a field to see results.</p>
+        <div class="results-meta" id="results-meta"></div>
+      </div>
+    </div>
+
+    <div id="score-legend" class="score-legend hidden">
+      <div class="legend-title">What the score means</div>
+      <div class="legend-row">
+        <span class="legend-swatch" style="background:#c1440e"></span>
+        <span class="legend-range">0–24</span>
+        <span class="legend-desc">Bare soil or severe vegetation stress</span>
+      </div>
+      <div class="legend-row">
+        <span class="legend-swatch" style="background:#d4811f"></span>
+        <span class="legend-range">25–49</span>
+        <span class="legend-desc">Sparse vegetation, signs of stress</span>
+      </div>
+      <div class="legend-row">
+        <span class="legend-swatch" style="background:#d4a017"></span>
+        <span class="legend-range">50–69</span>
+        <span class="legend-desc">Moderate health, uneven coverage</span>
+      </div>
+      <div class="legend-row">
+        <span class="legend-swatch" style="background:#2d6a4f"></span>
+        <span class="legend-range">70–100</span>
+        <span class="legend-desc">Strong, healthy, dense vegetation</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-photo" class="page">
+    <div class="info-bar">
+      <div class="info-bar-text">
+        <strong>Scan a plant photo</strong>
+        <span>Upload a close-up photo of a plant or leaf for an independent health scan.</span>
+      </div>
+    </div>
+
+    <div class="photo-content">
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="photo-input" accept="image/*" hidden />
+        <div id="upload-prompt">
+          <svg viewBox="0 0 64 64" width="40" height="40" fill="none">
+            <path d="M16 44V20a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v24" stroke="#7ba888" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M16 44h32a4 4 0 0 0 4-4V28" stroke="#7ba888" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="24" r="3" fill="#c1440e"/>
+            <path d="M20 40l8-8 6 6 10-10" stroke="#1b4332" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p><strong>Click to upload</strong> or drag a photo here</p>
+          <span class="upload-hint">JPG or PNG, close-up shots work best</span>
+        </div>
+        <img id="photo-preview" class="hidden" alt="Uploaded plant photo preview" />
+        <div id="photo-loading" class="photo-loading hidden">
+          <div class="spinner"></div>
+          <span>Scanning photo...</span>
+        </div>
+      </div>
+
+      <div id="photo-results" class="results-panel hidden">
+        <div class="results-score">
+          <div class="score-circle" id="photo-score-circle">--</div>
+          <div class="score-label">Health Score</div>
+        </div>
+        <div class="results-summary">
+          <p id="photo-results-sentence"></p>
+          <div class="results-meta" id="photo-results-meta"></div>
+        </div>
+      </div>
+
+      <div id="photo-score-legend" class="score-legend hidden">
+        <div class="legend-title">What the score means</div>
+        <div class="legend-row">
+          <span class="legend-swatch" style="background:#c1440e"></span>
+          <span class="legend-range">0–24</span>
+          <span class="legend-desc">Severe stress or damage visible</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-swatch" style="background:#d4811f"></span>
+          <span class="legend-range">25–49</span>
+          <span class="legend-desc">Noticeable discoloration or damage</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-swatch" style="background:#d4a017"></span>
+          <span class="legend-range">50–69</span>
+          <span class="legend-desc">Minor signs of stress</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-swatch" style="background:#2d6a4f"></span>
+          <span class="legend-range">70–100</span>
+          <span class="legend-desc">Healthy, vibrant, no visible issues</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

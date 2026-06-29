@@ -1,0 +1,21 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.routers import fields, photos
+
+app = FastAPI(title="GroundTruth API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5500"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(fields.router)
+app.include_router(photos.router)
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
