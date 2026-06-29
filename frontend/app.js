@@ -441,5 +441,3 @@ function renderPhotoResults(data) {
   photoResultsPanel.classList.remove("hidden");
   photoScoreLegend.classList.remove("hidden");
 }
-
-photoResultsPanel.classList.remove("hidden")
