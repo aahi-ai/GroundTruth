@@ -164,7 +164,7 @@ searchForm.addEventListener("submit", async (e) => {
 async function fetchNDVI(coordinates, fieldLayer) {
   try {
     const response = await fetch(
-      `${API_BASE}/fields/ndvi`,
+      "https://groundtruth-1.onrender.com/fields/ndvi",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -172,22 +172,17 @@ async function fetchNDVI(coordinates, fieldLayer) {
       }
     );
 
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.detail || "Request failed");
     }
 
     const data = await response.json();
+
     clearLoadingState();
     renderHeatmap(data, fieldLayer);
     renderResults(data);
+
   } catch (error) {
     clearLoadingState();
     console.error("Failed to fetch NDVI:", error);
