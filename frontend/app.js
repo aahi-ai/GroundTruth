@@ -1,5 +1,6 @@
 const navButtons = document.querySelectorAll(".nav-btn");
 const pages = document.querySelectorAll(".page");
+const API_BASE = "https://groundtruth-1.onrender.com";
 
 function showPage(pageName) {
   pages.forEach((page) => {
@@ -163,7 +164,7 @@ searchForm.addEventListener("submit", async (e) => {
 async function fetchNDVI(coordinates, fieldLayer) {
   try {
     const response = await fetch(
-      "https://groundtruth-1.onrender.com/fields/ndvi",
+      `${API_BASE}/fields/ndvi`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -392,7 +393,7 @@ function handlePhotoUpload(file) {
   const formData = new FormData();
   formData.append("file", file);
 
-  fetch("http://127.0.0.1:8000/photos/analyze", {
+  fetch(`${API_BASE}/photos/analyze`, {
     method: "POST",
     body: formData,
   })
