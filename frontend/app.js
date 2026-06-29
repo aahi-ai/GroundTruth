@@ -162,11 +162,21 @@ searchForm.addEventListener("submit", async (e) => {
 
 async function fetchNDVI(coordinates, fieldLayer) {
   try {
-    const response = await fetch("http://127.0.0.1:8000/fields/ndvi", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ coordinates }),
-    });
+    const response = await fetch(
+      "https://groundtruth-1.onrender.com/fields/ndvi",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ coordinates }),
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
 
     if (!response.ok) {
       const errorData = await response.json();
