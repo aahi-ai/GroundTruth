@@ -1,6 +1,5 @@
 const navButtons = document.querySelectorAll(".nav-btn");
 const pages = document.querySelectorAll(".page");
-const API_BASE = "https://groundtruth-1.onrender.com";
 
 function showPage(pageName) {
   pages.forEach((page) => {
@@ -24,11 +23,10 @@ document.getElementById("go-to-satellite").addEventListener("click", () => {
 });
 
 document.getElementById("go-to-photo").addEventListener("click", () => {
-    showPage("photo");
+  showPage("photo");
 });
 
-
-const map = L.map("map").setView([42.032, -93.6175], 14);
+const map = L.map("map").setView([37.8227, -121.2766], 14);
 
 L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -79,7 +77,6 @@ map.on(L.Draw.Event.CREATED, function (event) {
 
   fetchNDVI(coordinates, layer);
 });
-
 
 let loadingLayer = null;
 let loadingInterval = null;
@@ -163,14 +160,11 @@ searchForm.addEventListener("submit", async (e) => {
 
 async function fetchNDVI(coordinates, fieldLayer) {
   try {
-    const response = await fetch(
-      "https://groundtruth-1.onrender.com/fields/ndvi",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ coordinates }),
-      }
-    );
+    const response = await fetch("https://groundtruth-1.onrender.com/fields/ndvi", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ coordinates }),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -178,11 +172,9 @@ async function fetchNDVI(coordinates, fieldLayer) {
     }
 
     const data = await response.json();
-
     clearLoadingState();
     renderHeatmap(data, fieldLayer);
     renderResults(data);
-
   } catch (error) {
     clearLoadingState();
     console.error("Failed to fetch NDVI:", error);
@@ -257,7 +249,6 @@ function ndviToColor(value) {
   }
   return `rgb(${r}, ${g}, ${b})`;
 }
-
 
 (function renderHeroSwatchGrid() {
   const container = document.getElementById("hero-grid");
@@ -388,7 +379,7 @@ function handlePhotoUpload(file) {
   const formData = new FormData();
   formData.append("file", file);
 
-  fetch(`${API_BASE}/photos/analyze`, {
+  fetch("https://groundtruth-1.onrender.com/photos/analyze", {
     method: "POST",
     body: formData,
   })
