@@ -32,8 +32,11 @@ Visit: [groundtruth.vercel.app](https://groundtruth.vercel.app/) | No installati
 ## Tech Stack
 
 **Frontend:** HTML / CSS / JavaScript (no framework, no build step)
+
 **Backend:** Python / FastAPI
+
 **Satellite data:** Microsoft Planetary Computer 
+
 **Photo analysis:** OpenRouter vision API 
 
 — made by aahi
