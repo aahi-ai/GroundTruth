@@ -9,8 +9,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5500",
-        "https://groundtruth.vercel.app",
-        "https://groundtruth-1.vercel.app",
+        "https://groundtruth-rust.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
