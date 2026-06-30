@@ -2,7 +2,7 @@
 
 GroundTruth is a crop health tool to analyze plant and crop vegetation using satellite imagery and AI-Powered photo scanning.
 
-**Try it live: [groundtruth.vercel.app](https://groundtruth.vercel.app/)**
+**Try it live: [groundtruth-rust.vercel.app](https://groundtruth-rust.vercel.app/)**
 
 ## What is this?
 
@@ -14,7 +14,7 @@ On a recent trip to my grandfather's village in India, I took a look at all the 
 
 ## How to use it
 
-Visit: [groundtruth.vercel.app](https://groundtruth.vercel.app/) | No installation or sign-in required. 
+Visit: [groundtruth-rust.vercel.app](https://groundtruth-rust.vercel.app/) | No installation or sign-in required. 
 
 **Satellite tool:**
 1. Go to the Satellite tab
