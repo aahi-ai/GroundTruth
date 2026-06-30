@@ -33,7 +33,7 @@ Visit: [groundtruth-rust.vercel.app](https://groundtruth-rust.vercel.app/) | No 
 
 ## Tech Stack
 
-**Frontend:** HTML / CSS / JavaScript (no framework, no build step)
+**Frontend:** HTML / CSS / JavaScript
 
 **Backend:** Python / FastAPI
 
