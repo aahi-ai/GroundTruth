@@ -1,3 +1,5 @@
+<img width="884" height="214" alt="Screenshot 2026-06-30 at 2 01 35 PM" src="https://github.com/user-attachments/assets/eacdac7c-9a93-407a-9542-8b26da74c07e" />
+
 # GroundTruth
 
 GroundTruth is a crop health tool to analyze plant and crop vegetation using satellite imagery and AI-Powered photo scanning.
