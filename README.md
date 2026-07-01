@@ -31,6 +31,8 @@ Visit: [groundtruth-rust.vercel.app](https://groundtruth-rust.vercel.app/) | No 
 3. Wait a few seconds for the AI scan
 4. See the health score, summary, and any detected issues
 
+Please note, first-time scans may take upto a minute due to Render's free tier deployment.
+
 ## Tech Stack
 
 **Frontend:** HTML / CSS / JavaScript
