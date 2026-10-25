@@ -73,7 +73,7 @@ def _call_claude(image_b64: str, media_type: str) -> dict:
         },
         json={
             "model": CLAUDE_MODEL,
-            "max_tokens": 400,
+            "max_tokens": 1024,
             "messages": [
                 {
                     "role": "user",
@@ -97,8 +97,11 @@ def _call_claude(image_b64: str, media_type: str) -> dict:
         raise RuntimeError(f"Claude failed ({response.status_code}): {response.text}")
 
     result = response.json()
-    raw_content = result["content"][0]["text"]
-    return _parse_json(raw_content)
+    # The reply can contain several blocks (e.g. thinking + text); use the text one
+    text_blocks = [b["text"] for b in result.get("content", []) if b.get("type") == "text"]
+    if not text_blocks:
+        raise RuntimeError(f"Claude returned no text (stop_reason: {result.get('stop_reason')})")
+    return _parse_json(text_blocks[-1])
 
 
 def _call_openrouter(model: str, image_b64: str, media_type: str) -> dict:
